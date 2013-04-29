@@ -116,6 +116,7 @@ initialize(void)
 
   const char    *options = igprof_options();
   bool          enable = false;
+  bool          enable_on_init = true;
 
   while (options && *options)
   {
@@ -150,6 +151,11 @@ initialize(void)
         {
           s_keep = true;
           options += 5;
+        }
+        else if (! strncmp(options, ":nostart", 8))
+        {
+          enable_on_init = false;
+          options += 8;
         }
         else
           break;
@@ -197,7 +203,8 @@ initialize(void)
 
   enableSignalHandler();
   enableTimer();
-  igprof_enable_globally();
+  if (enable_on_init)
+    igprof_enable_globally();
 }
 
 // -------------------------------------------------------------------
